@@ -1,21 +1,10 @@
 package myWorkSpace;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.io.*;
+import java.net.*;
 import java.time.Duration;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Properties;
-import java.util.Set;
+import java.util.*;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.edge.EdgeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -24,11 +13,8 @@ import org.testng.ITestResult;
 import org.testng.SkipException;
 import org.testng.annotations.*;
 
-import com.aventstack.extentreports.ExtentReports;
-import com.aventstack.extentreports.ExtentTest;
-import com.aventstack.extentreports.Status;
-import com.aventstack.extentreports.markuputils.ExtentColor;
-import com.aventstack.extentreports.markuputils.MarkupHelper;
+import com.aventstack.extentreports.*;
+import com.aventstack.extentreports.markuputils.*;
 import com.aventstack.extentreports.reporter.ExtentSparkReporter;
 import com.aventstack.extentreports.reporter.configuration.Theme;
 
@@ -42,20 +28,20 @@ public class W3Schools_Automation {
 	ExtentTest test;
 
 	Properties prop= new Properties();
+	Properties loc= new Properties();
 	String path= System.getProperty("user.dir");
-	FileInputStream inp;
+	FileInputStream fis1;
+	FileInputStream fis2;
 
 	@BeforeTest
 	public void setUp() throws IOException {
 
 		if(driver== null) {
-			try {
-				inp= new FileInputStream(path+"/src/test/java/configFile/config.properties");
-			} catch (FileNotFoundException e) {
-				e.printStackTrace();
+				fis1= new FileInputStream(path+"/src/test/java/configFile/config.properties");
+				fis2= new FileInputStream(path+"/src/test/java/configFile/locators.properties");
 			}
-			prop.load(inp);
-		}
+			prop.load(fis1);
+			loc.load(fis2);
 
 		if(prop.getProperty("browser").equalsIgnoreCase("chrome")) {
 			WebDriverManager.chromedriver().setup();
@@ -131,8 +117,6 @@ public class W3Schools_Automation {
 
 		String selText= prop.getProperty("text");
 		for(WebElement option: auto) {
-			//System.out.println(option);
-
 			if(option.getText().equalsIgnoreCase(selText)){
 				option.click();
 				break;
@@ -164,7 +148,6 @@ public class W3Schools_Automation {
 		driver.findElement(By.id("search2")).sendKeys(prop.getProperty("input2")+Keys.ENTER);
 	}
 
-
 	@Test
 	public void test4() throws InterruptedException {
 
@@ -178,7 +161,7 @@ public class W3Schools_Automation {
 
 		WebElement logo3= driver.findElement
 				(By.cssSelector("i.fa.fa-logo.ws-hover-text-green"));
-		//fa fa-logo ws-text-green ws-hover-text-green
+		
 		if(logo3.isDisplayed()) {
 			System.out.println("Welcome to W3Schools SQL Tutorial");
 			System.out.println("=============================");
